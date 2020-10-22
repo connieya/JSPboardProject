@@ -31,10 +31,10 @@
 
 		while (resultset.next()) {
 			int id = resultset.getInt("id");
-			String password = resultset.getString("password");
+			String pw = resultset.getString("password"); //DB에 있는 컬럼 이름과 일치
 			String name = resultset.getString("name");
 
-			out.println("아이디: " + id + "이름: " + name + "패스워드: " + password + "<br/>");
+			out.println("아이디: " + id + "이름: " + name + "패스워드: " + pw + "<br/>");
 		}
 
 	} catch (Exception e) {
