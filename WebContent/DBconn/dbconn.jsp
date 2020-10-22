@@ -25,9 +25,9 @@
 	<%
 		try {
 		Class.forName(driver);
-		conn = DriverManager.getConnection(url, user, pw);
-		statement = conn.createStatement();
-		resultset = statement.executeQuery(query);
+		Connection	conn = DriverManager.getConnection(url, user, pw);
+		Statement statement = conn.createStatement();
+		ResultSet resultset = statement.executeQuery(query);
 
 		while (resultset.next()) {
 			int id = resultset.getInt("id");
