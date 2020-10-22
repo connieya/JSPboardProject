@@ -67,14 +67,16 @@ public class LoginOk extends HttpServlet {
 			while(rs.next()) {
 				
 				id = rs.getString("name");
-				pw = rs.getNString("password");
+				DBpw = rs.getNString("password");
+				System.out.println("id : " + id);
+				System.out.println("DBpw : " + DBpw);
+				
+				HttpSession httpSession = request.getSession();
+				httpSession.setAttribute("name", id);
+				httpSession.setAttribute("pw", DBpw);
+				
+				response.sendRedirect("loginResult.jsp");
 			}
-			
-			HttpSession httpSession = request.getSession();
-			httpSession.setAttribute("name", id);
-			httpSession.setAttribute("pw", pw);
-			
-			response.sendRedirect("loginResult.jsp");
 			
 		}catch(Exception e) {
 			e.printStackTrace();
