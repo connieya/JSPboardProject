@@ -16,8 +16,8 @@ public class JoinCommand implements BCommand {
 		// TODO Auto-generated method stub
 		MemberDao dao = new MemberDao();
 		
-		MemberVo vo = dao.insert();
-		request.setAttribute("insert", vo);
+	
+		
 	}
 	
 

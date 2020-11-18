@@ -50,12 +50,12 @@ public class LoginOk extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		//doGet(request, response);
 		request.setCharacterEncoding("utf-8");
 		
 		String id = request.getParameter("id");
 		String DBpw = request.getParameter("pw");
-		String query = "select * from user where  name = '"+id+"' and password= '"+DBpw+"' ";
+		String query = "select * from user where  id = '"+id+"' and password= '"+DBpw+"' ";
 		
 		
 		try {
@@ -65,8 +65,8 @@ public class LoginOk extends HttpServlet {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
 			while(rs.next()) {
-				
-				id = rs.getString("name");
+				System.out.println("test");
+				id = rs.getString("id");
 				DBpw = rs.getNString("password");
 				System.out.println("id : " + id);
 				System.out.println("DBpw : " + DBpw);

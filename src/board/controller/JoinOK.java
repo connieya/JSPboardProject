@@ -54,10 +54,11 @@ public class JoinOK extends HttpServlet {
 		String user = "root";
 		String pw = "1234";
 		
+		String id = request.getParameter("id");
 		String name = request.getParameter("name");
 		String password = request.getParameter("pw");
 		
-		String query = "insert into user(name, password) values('"+name+"','"+password+"')";
+		String query = "insert into user(id, name, password) values('"+id+"','"+name+"','"+password+"')";
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
