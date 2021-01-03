@@ -33,6 +33,7 @@ public class MemberDao {
 	public void insert() {
 		
 		
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		

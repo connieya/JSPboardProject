@@ -47,9 +47,9 @@ public class BoardDao {
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				String name = rs.getNString("name");
-				String title =rs.getNString("title");
-				String content = rs.getNString("content");
+				String name = rs.getString("name"); //column 명
+				String title =rs.getString("title");
+				String content = rs.getString("content");
 				Date date = rs.getDate("date");
 				 int readCount = rs.getInt("readCount");
 				 

@@ -11,8 +11,8 @@
 
 
 	<form action="write.do" method="post">
-	제목: <input type="text" name="name" /> <br />
-	내용 : <input type="text" name="content" /><br />
+		제목: <input type="text" name="name" /> <br />
+		내용 : <input type="text" name="content" /><br />
 	<input type="submit" value="글작성" />
 	</form>
 </body>

@@ -7,11 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
+<jsp:include page="component/header.jsp" flush="false" />
 		<h1>회원가입</h1>
-		<form action="list.do" method="post">
-			아이디: <input type="text" name="name "/>
-			비밀번호: <input type="password" name="password"/>
-			<input type="submit" value="로그인" />
+		<form action="JoinOk" method="post">
+			아이디 : <input type="text" name=id  size="20" /> <br/>
+			이름 : <input type="text" name="name" size="20"  /> <br/>
+			비밀번호 : <input type="password" name="pw" size="30"> <br/>
+			<input type="submit" value="회원가입" />
 		
 		</form>
 

@@ -1,8 +1,10 @@
 package board.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 import javax.servlet.ServletException;
@@ -20,6 +22,7 @@ public class JoinOK extends HttpServlet {
 	
 	private Connection connection;
 	private Statement stmt;
+	private PreparedStatement pstmt;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -58,22 +61,30 @@ public class JoinOK extends HttpServlet {
 		String name = request.getParameter("name");
 		String password = request.getParameter("pw");
 		
-		String query = "insert into user(id, name, password) values('"+id+"','"+name+"','"+password+"')";
+		String sql = "insert into user(id, name, password) values(?,?,?)";
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(url,user,pw);
-			stmt = connection.createStatement();
+			
 			System.out.println("db연동성공");
 			
-			int i = stmt.executeUpdate(query); // executeUpdate는 반환 값이 있다. 그래서 int i에 값을 넣을 수 있음
-			
-			if(i ==1) {
-				System.out.println("insert 성공");
-				response.sendRedirect("joinResult.jsp");
+			pstmt = connection.prepareStatement(sql);
+			// executeUpdate는 반환 값이 있다. 그래서 int i에 값을 넣을 수 있음
+			pstmt.setString(1, id);
+			pstmt.setString(2, name);
+			pstmt.setString(3, password);
+			int result = pstmt.executeUpdate();
+			if(result == 1) {
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('회원가입 완료')");
+				out.println("</script>");
 				
+				response.sendRedirect("index.jsp");
+				System.out.println("회원가입 성공");
 			}else {
-				System.out.println("insert 실패");
+				System.out.println("회원가입 실패");
 				response.sendRedirect("join.html");
 			}
 		}catch(Exception e){
