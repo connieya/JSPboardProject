@@ -131,6 +131,59 @@ request.getParameter로 받음
 
 그리고 DB랑 연동하기 위해 BoardDAO.java 호출
 
+---------------------------------------------------------- 
+
+### 글 목록 보기
+
+`header.jsp`
+
+```
+ <a class="nav-item nav-link " href="list.do">게시판</a>
+```
+
+`BFrontController.java`
+
+```
+@WebServlet("*.do")
+public class BFrontController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	if(com.equals("/list.do")) {
+			bcommand = new ListCommand();
+			bcommand.execute(request, response);
+			viewpage = "board.jsp";
+	
+```
+
+`ListCommand.java`
+
+```
+public class ListCommand implements BCommand {
+
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		
+		BoardDao dao = new BoardDao();
+		ArrayList<BoardDto> dto = dao.list();
+		request.setAttribute("list", dto);
+		
+		//이름은 list , 값은 dto
+		
+		
+	}
+
+	
+}
+```
+`BoardDao.java list메서드`  호출
+
+BoardDto를 ArrayList로 해서 데이터 값 넣어줌
+
+
+
+
+-------------------------------------
 
 ### 글 상세보기 페이지
 
@@ -139,6 +192,9 @@ else if(com.equals("/content_view.do")) {
 			bcommand = new ContentCommand();
 			bcommand.execute(request, response);
 			viewpage ="content_view.jsp";
+			
+			
+			
 		}
 ```
 FrontController에 요청이 들어왔다.
