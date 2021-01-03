@@ -15,6 +15,7 @@ import board.command.BModifyCommand;
 import board.command.ContentCommand;
 import board.command.JoinCommand;
 import board.command.ListCommand;
+import board.command.WriteCommand;
 
 /**
  * Servlet implementation class MemberServlet
@@ -65,14 +66,14 @@ public class BFrontController extends HttpServlet {
 		
 		
 		if(com.equals("/list.do")) {
-			bcommand = new JoinCommand();
-			bcommand.execute(request, response);
-			viewpage = "index.jsp";
-			
-		}else if(com.equals("/write.do")) {
 			bcommand = new ListCommand();
 			bcommand.execute(request, response);
-			viewpage = "write.jsp";
+			viewpage = "board.jsp";
+			
+		}else if(com.equals("/write.do")) {
+			bcommand = new WriteCommand();
+			bcommand.execute(request, response);
+			viewpage = "board.jsp";
 		}else if(com.equals("/content_view.do")) {
 			bcommand = new ContentCommand();
 			bcommand.execute(request, response);

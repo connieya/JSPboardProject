@@ -18,6 +18,8 @@ public class ListCommand implements BCommand {
 		ArrayList<BoardDto> dto = dao.list();
 		request.setAttribute("list", dto);
 		
+		//이름은 list , 값은 dto
+		
 		
 	}
 

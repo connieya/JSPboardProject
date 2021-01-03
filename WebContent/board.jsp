@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,30 +24,22 @@
         <th>제목</th>
         <th>작성자</th>
         <th>현재시간</th>
+        <th>조회수</th>
       </tr>
     </thead>
     <tbody>
+    <c:forEach items="${list}" var="boardlist">
       <tr>
-      	<td>1</td>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
+      	<td>${boardlist.no}</td>
+        <td>${boardlist.title}</td>
+        <td>${boardlist.name}</td>
+        <td>${boardlist.date}</td>
+        <td>${boardlist.readCount}</td>
       </tr>
-      <tr>
-      	<td>2</td>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-     	<td>3</td>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
+      </c:forEach>
     </tbody>
   </table>
-  <button onclick="location=write.jsp">글쓰기</button>
+  <a class="btn btn-primary" href="write.jsp">글쓰기</a>
 </div>
 </body>
 </html>
