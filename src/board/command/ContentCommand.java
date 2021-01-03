@@ -10,8 +10,9 @@ public class ContentCommand implements BCommand{
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+		System.out.println("contentCommand 호출");
 		String no = request.getParameter("no");
+		
 		BoardDao dao = new BoardDao();
 		BoardDto dto = dao.글상세보기(no);
 		request.setAttribute("content_view", dto);

@@ -73,7 +73,7 @@ public class BFrontController extends HttpServlet {
 		}else if(com.equals("/write.do")) {
 			bcommand = new WriteCommand();
 			bcommand.execute(request, response);
-			viewpage = "board.jsp";
+			viewpage = "list.do";
 		}else if(com.equals("/content_view.do")) {
 			bcommand = new ContentCommand();
 			bcommand.execute(request, response);
@@ -82,10 +82,14 @@ public class BFrontController extends HttpServlet {
 			bcommand = new BModifyCommand();
 			bcommand.execute(request, response);
 			viewpage ="list.do";
-		}else if(com.equals("delete.do")) {
+		}else if(com.equals("/delete.do")) {
 			bcommand = new BDeleteCommand();
 			bcommand.execute(request, response);
 			viewpage = "list.do";
+		}else if(com.equals("/authentication.do")){
+			bcommand = new JoinCommand();
+			bcommand.execute(request, response);
+			viewpage = "delete.do";
 		}
 		
 		
