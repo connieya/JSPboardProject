@@ -46,8 +46,9 @@
 				</tbody>
 				</table>
   
-  <a class="btn btn-primary" href="write.jsp">수정</a>
+  <a class="btn btn-primary" href="modify_view.jsp?no=${content_view.no }">수정</a>
    <a class="btn btn-danger"  href="delete.do?no=${content_view.no }" >삭제</a>
+    <a class="btn btn-warning"  href="list.do" >목록</a>
 
 <%-- <div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
 	<div class="modal-dialog modal-sm">

@@ -80,6 +80,19 @@ public class BoardDao {
 		
 	}
 	
+	public void paging() {
+		String sql = "select count(*) from board";
+		int totalCount = 0;
+		
+		try {
+			pstmt = connection.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			totalCount = rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public ArrayList<BoardDto> list() {
 		
 		ArrayList<BoardDto> dtos = new ArrayList<BoardDto>();
@@ -154,7 +167,7 @@ public class BoardDao {
 			
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				조회수증가(no);
+				
 				System.out.println("ㅎㅎ");
 				System.out.println(rs.getInt(1));
 				System.out.println(rs.getString(2));
@@ -164,7 +177,7 @@ public class BoardDao {
 				dto.setContent(rs.getString(4));
 				dto.setDate(rs.getTimestamp(5));
 				dto.setReadCount(rs.getInt(6));
-				
+				조회수증가(no);
 				return dto;
 			}
 			
@@ -284,5 +297,23 @@ public class BoardDao {
 		
 		return -2;
 		
+	}
+	
+	public BoardDto 글수정하기(BoardDto dto) {
+		
+		String sql = "update board set title = ? , content = ? where no =?";
+				
+				
+		try {
+			pstmt =connection.prepareStatement(sql);
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getContent());
+			pstmt.setInt(3, dto.getNo());
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
 	}
 }
