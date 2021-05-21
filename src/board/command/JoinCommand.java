@@ -1,12 +1,9 @@
 package board.command;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import board.dao.BoardDao;
-import board.dao.MemberDao;
-import board.dto.MemberVo;
 
 
 public class JoinCommand implements BCommand {

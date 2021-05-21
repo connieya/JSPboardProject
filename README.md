@@ -1,200 +1,29 @@
-# JSP
+# JSP 프론트 컨트롤러
 
+`21/05/21 리팩토링 시작`
 
----------------------------
+### `컨텍스트 초기화 매개변수`
+- JDBC 드라이버와 데이터베이스 연결 정보를 dao 클래스에 선언하였음
+- DB 정보를 소스 파일 밖에 두면 변경사항이 생겨도 web.xml 편집하면 됨
+- 유지보수가 쉬워짐
 
+### `필터 사용하기 `
+- 서블릿 필터에 UTF-8 인코딩 설정
+- web.xml 필터 등록 & CharacterEncodingFilter 클래스 생성
+- 각 서블릿 마다 인코딩 설정하는 번거로운 작업 생략 가능
+- 서블릿 컨테이너가 웹 애플리케이션 시작할 때 필터의 인스턴스 생성
+- init() 호출 -> 요청이 들어오면 요청에 해당하는 doFilter()호출
+- doFilter() 에서 해야할 작업 후 다음 필터의 doFilter() 호출
+- 마지막 필터는 내부적으로 서블릿의  service() 호출
+- service() 호출이 끝나면 이전 필터로 돌아감(제일 처음 호출 필터까지 반복) 
+- 클라이언트에게 응답 결과를 보냄
 
-## FrontController
-
-```
-package board.controller;
-
-import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import board.command.BCommand;
-import board.command.BDeleteCommand;
-import board.command.BModifyCommand;
-import board.command.ContentCommand;
-import board.command.JoinCommand;
-import board.command.ListCommand;
-
-/**
- * Servlet implementation class MemberServlet
- */
-@WebServlet("*.do")
-public class BFrontController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public BFrontController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doHandle(request, response);
-		System.out.println("doget 호출");
-	
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doHandle(request, response);
-		System.out.println("dopost 호출");
-	}
-	
-	
-	protected void doHandle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doHandle 응답");
-		
-		request.setCharacterEncoding("utf-8");
-		
-		String viewpage = null; //어떤 페이지를 보여줄건지 확인하는 값
-		BCommand bcommand = null; //dao에 작업을 전달하는??
-		
-		String uri = request.getRequestURI();
-		String conPath = request.getContextPath();
-		String com = uri.substring(conPath.length());
-		
-		
-		
-		if(com.equals("/list.do")) {
-			bcommand = new JoinCommand();
-			bcommand.execute(request, response);
-			viewpage = "index.jsp";
-			
-		}else if(com.equals("/write.do")) {
-			bcommand = new ListCommand();
-			bcommand.execute(request, response);
-			viewpage = "write.jsp";
-		}else if(com.equals("/content_view.do")) {
-			bcommand = new ContentCommand();
-			bcommand.execute(request, response);
-			viewpage ="content_view.jsp";
-		}else if(com.equals("/modify.do")) {
-			bcommand = new BModifyCommand();
-			bcommand.execute(request, response);
-			viewpage ="list.do";
-		}else if(com.equals("delete.do")) {
-			bcommand = new BDeleteCommand();
-			bcommand.execute(request, response);
-			viewpage = "list.do";
-		}
-		
-		
-		
-		RequestDispatcher dis = request.getRequestDispatcher(viewpage);
-		dis.forward(request, response);
-	
-	}
-
-}
-
-```
-
-.do로 끝나는 요청을 다 받는 frontcontroller
-
-그리고 각 각의 요청을 command 에서 수행
-
-
-### 글쓰기
-
-write.jsp / form 태그 -> write.do로 요청 <br/>
-BFrontController.java [ @WebServlet("*.do") do로 오는 요청 다 받음] 에서 응답 <br/>
-get , post 요청 다 받는 Dohandle 로직 수행 
-
-```
-(com.equals("/write.do")) {
-			bcommand = new WriteCommand();
-			bcommand.execute(request, response);
-			viewpage = "board.jsp";
-```
-WriteCommand.java
-
-write.jsp 에서 보낸 데이터 값
-request.getParameter로 받음
-
-그리고 DB랑 연동하기 위해 BoardDAO.java 호출
-
----------------------------------------------------------- 
-
-### 글 목록 보기
-
-`header.jsp`
-
-```
- <a class="nav-item nav-link " href="list.do">게시판</a>
-```
-
-`BFrontController.java`
-
-```
-@WebServlet("*.do")
-public class BFrontController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	
-	if(com.equals("/list.do")) {
-			bcommand = new ListCommand();
-			bcommand.execute(request, response);
-			viewpage = "board.jsp";
-	
-```
-
-`ListCommand.java`
-
-```
-public class ListCommand implements BCommand {
-
-	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
-		BoardDao dao = new BoardDao();
-		ArrayList<BoardDto> dto = dao.list();
-		request.setAttribute("list", dto);
-		
-		//이름은 list , 값은 dto
-		
-		
-	}
-
-	
-}
-```
-`BoardDao.java list메서드`  호출
-
-BoardDto를 ArrayList로 해서 데이터 값 넣어줌
-
-
-
-
--------------------------------------
-
-### 글 상세보기 페이지
-
-```
-else if(com.equals("/content_view.do")) {
-			bcommand = new ContentCommand();
-			bcommand.execute(request, response);
-			viewpage ="content_view.jsp";
-			
-			
-			
-		}
-```
-FrontController에 요청이 들어왔다.
+### `dao 객체 공유해서 사용하기`
+- 프론트 컨트롤러 -> 페이지 컨트롤러 작업 위임
+- 페이지 컨트롤러에서 dao 객체 사용 , 받은 vo 객체 처리
+- 페이지 컨트롤러에서 요청 시 매번 dao 인스턴스 생성
+- 가바지(garbage) 가 생성되고, 실행 시간이 길어짐
+- SevletContextListener를 활용하자
+- 리스너에서 DB 커넥션 객체 , DAO 객체 생성하기
+- DAO 객체에 DB 커넥션 객체 주입하기
+- dao 객체 ServletContext에 저장하기

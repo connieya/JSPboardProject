@@ -24,8 +24,7 @@
 						<th colspan="3" style="background-color: #eeeeee; text-align: center;">상세보기</th>
 					</tr>
 				</thead>
-				<tbody>
-			
+				<tbody>	
 				<tr>
 				 	<td>작성자</td>
 				 	<td>${content_view.name}</td>

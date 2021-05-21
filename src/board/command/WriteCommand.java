@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import board.dao.BoardDao;
-import board.dto.BoardDto;
+import board.vo.Board;
 
 public class WriteCommand implements BCommand {
 
@@ -20,7 +20,7 @@ public class WriteCommand implements BCommand {
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
 		
-		BoardDto dto = new BoardDto(name,title,content,password);
+		Board dto = new Board(name,title,content,password);
 		  dao.글쓰기(dto);
 			
 			

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import board.dao.BoardDao;
-import board.dto.BoardDto;
+import board.vo.Board;
 
 public class ListCommand implements BCommand {
 
@@ -15,7 +15,7 @@ public class ListCommand implements BCommand {
 		// TODO Auto-generated method stub
 		
 		BoardDao dao = new BoardDao();
-		ArrayList<BoardDto> dto = dao.list();
+		ArrayList<Board> dto = dao.list();
 		request.setAttribute("list", dto);
 		
 		//이름은 list , 값은 dto

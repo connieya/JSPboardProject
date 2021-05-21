@@ -19,7 +19,7 @@
 </style>
 </head>
 <body>
-	<jsp:include page="component/header.jsp" flush="false" />
+	<jsp:include page="../component/header.jsp" flush="false" />
 	<h2> 게시판</h2>
 <div class="container">
   
@@ -45,7 +45,7 @@
       </c:forEach>
     </tbody>
   </table>
-  <a class="btn btn-primary" href="write.jsp">글쓰기</a>
+  <a class="btn btn-primary" href="BoardForm.jsp">글쓰기</a>
 </div>
 </body>
 </html>

@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<jsp:include page="component/header.jsp" flush="false" />
+	<jsp:include page="../component/header.jsp" flush="false" />
 	
 
 	<div class="container-sm p-3 border" style="margin-top:20px; border:2px solid red;">

@@ -1,9 +1,9 @@
-package board.dto;
+package board.vo;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class BoardDto {
+public class Board {
 	
 	private int no;
 	private String name;
@@ -13,7 +13,7 @@ public class BoardDto {
 	private int readCount;
 	private String password;
 	
-	public BoardDto(String name, String title, String content, Timestamp date, int readCount) {
+	public Board(String name, String title, String content, Timestamp date, int readCount) {
 		super();
 		this.name = name;
 		this.title = title;
@@ -24,7 +24,7 @@ public class BoardDto {
 	
 	
 	
-	public BoardDto(String name, String title, String content, String password) {
+	public Board(String name, String title, String content, String password) {
 		super();
 		this.name = name;
 		this.title = title;
@@ -34,7 +34,7 @@ public class BoardDto {
 
 
 
-	public BoardDto() {
+	public Board() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -42,56 +42,56 @@ public class BoardDto {
 		return no;
 	}
 
-	public void setNo(int no) {
-		this.no = no;
+	public Board setNo(int no) {
+		return this;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Board setName(String name) {
+		return this;
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public Board setTitle(String title) {
+		return this;
 	}
 
 	public String getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public Board setContent(String content) {
+		return this;
 	}
 
 	public Timestamp getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
-		this.date = date;
+	public Board setDate(Timestamp date) {
+		return this;
 	}
 
 	public int getReadCount() {
 		return readCount;
 	}
 
-	public void setReadCount(int readCount) {
-		this.readCount = readCount;
+	public Board setReadCount(int readCount) {
+		return this;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public Board setPassword(String password) {
+		return this;
 	}
 
 	

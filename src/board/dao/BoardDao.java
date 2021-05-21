@@ -13,7 +13,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import board.dto.BoardDto;
+import board.vo.Board;
 
 public class BoardDao {
 
@@ -21,33 +21,16 @@ public class BoardDao {
 	Connection connection;
 	PreparedStatement pstmt;
 	ResultSet rs;
-	
-	String driver = "com.mysql.jdbc.Driver";
-	String url = "jdbc:mysql://localhost:3306/cony";
-	String user = "root";
-	String pw = "1234";
-	
-	public BoardDao() {
-	
-	try {
-		//Context context = new InitialContext();
-		//datasource = (DataSource) context.lookup("javax.sql.DataSource");
-		Class.forName(driver);
-		 connection = DriverManager.getConnection(url,user,pw);
-		
-	}catch(Exception e){
-		e.printStackTrace();
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
-	
-	} // BoardDao() 생성자 끝
-	
-	public int 글쓰기(BoardDto dto) {
-	
-		
+	public int 글쓰기(Board dto) {
+
 		ResultSet rs = null;
-		
+
 		try {
-			
+
 			System.out.println("db연동 성공");
 			String sql = "insert into board(name,title,content,password,readCount) values(?,?,?,?,?)";
 			pstmt = connection.prepareStatement(sql);
@@ -57,33 +40,36 @@ public class BoardDao {
 			pstmt.setString(4, dto.getPassword());
 			pstmt.setInt(5, 0);
 			int result = pstmt.executeUpdate();
-			System.out.println("result 값:" +result);
-		
+			System.out.println("result 값:" + result);
+
 			return result;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("오류 떴음");
-		
-		}finally {
-			
+
+		} finally {
+
 			try {
-					if(rs != null) rs.close();
-					if(pstmt != null) pstmt.close();
-					if(connection != null) connection.close();
-			}catch(Exception e1) {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
+
 		}
-		
+
 		return -1;
-		
+
 	}
-	
+
 	public void paging() {
 		String sql = "select count(*) from board";
 		int totalCount = 0;
-		
+
 		try {
 			pstmt = connection.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -93,84 +79,65 @@ public class BoardDao {
 			e.printStackTrace();
 		}
 	}
-	public ArrayList<BoardDto> list() {
-		
-		ArrayList<BoardDto> dtos = new ArrayList<BoardDto>();
-		
+
+	public ArrayList<Board> list() {
+
+		ArrayList<Board> dtos = new ArrayList<Board>();
+
 		ResultSet rs = null;
-		
-		
+
 		try {
-			
-			
-			
-			String query ="select * from board order by no desc" ;
+
+			String query = "select * from board order by no desc";
 			pstmt = connection.prepareStatement(query);
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				int no = rs.getInt("no");
-				String title =rs.getString("title");
+				String title = rs.getString("title");
 				Timestamp date = rs.getTimestamp("date");
-				String name = rs.getString("name"); //column 명
-				 int readCount = rs.getInt("readCount");
-				 
-//				 System.out.println("no:" +no);
-//				 System.out.println("name:" +name);
-//				 System.out.println("title" +title);
-//				 System.out.println("date" +date);
-//				 System.out.println("readCount:" +readCount);
-				 BoardDto dto = new BoardDto();
-				 dto.setNo(no);
-				 dto.setName(name);
-				 dto.setTitle(title);
-				 dto.setDate(date);
-				 dto.setReadCount(readCount);
-	
-				 dtos.add(dto);
+				String name = rs.getString("name"); // column 명
+				int readCount = rs.getInt("readCount");
+				Board dto = new Board()
+						.setNo(no)
+						.setName(name)
+						.setTitle(title)
+						.setDate(date)
+						.setReadCount(readCount);
+				dtos.add(dto);
 			}
-			
-			
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		
 		}finally {
-			
+
 			try {
-					if(rs != null) rs.close();
-					if(pstmt != null) pstmt.close();
-					if(connection != null) connection.close();
-			}catch(Exception e1) {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
 		}
-		
+
 		return dtos;
-		
 	} // list() 끝
-	
-	public BoardDto 글상세보기(String no) {
+
+	public Board 글상세보기(String no) {
 		System.out.println("글 상세보기 호출");
-		
-		
 		ResultSet rs = null;
-		
+
 		String sql = "select * from board where no =?";
-		BoardDto dto = new BoardDto();
-		
+		Board dto = new Board();
 		try {
-			
-			
+
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, no);
-			
+
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				
-				System.out.println("ㅎㅎ");
-				System.out.println(rs.getInt(1));
-				System.out.println(rs.getString(2));
+			if (rs.next()) {
 				dto.setNo(rs.getInt(1));
 				dto.setName(rs.getString(2));
 				dto.setTitle(rs.getNString(3));
@@ -180,26 +147,22 @@ public class BoardDao {
 				조회수증가(no);
 				return dto;
 			}
-			
-			
-			
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
-			
-		}finally {
-			
+		} finally {
+
 			try {
-					if(rs != null) rs.close();
-					if(pstmt != null) pstmt.close();
-					if(connection != null) connection.close();
-			}catch(Exception e1) {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
 		}
-		
 		return null;
-		
 	}
 	public void 조회수증가(String no) {
 		String sql = "update board set readCount = readCount +1 where no =?";
@@ -208,104 +171,100 @@ public class BoardDao {
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, no);
 			int result = pstmt.executeUpdate();
-			
+
 			System.out.println("결과는 : " + result);
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
-			
+		} finally {
+
 			try {
-					if(rs != null) rs.close();
-					if(pstmt != null) pstmt.close();
-					if(connection != null) connection.close();
-			}catch(Exception e1) {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
 		}
-		
-		
-		
 	}
-	
-	public int 글삭제하기(String no ) {
-		
-		System.out.println("삭제하기 메서드 호출");
-		
-		
+	public int 글삭제하기(String no) {
 		String sql = "delete from board where no = ?";
-		
+
+		try {
+
+			pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, no);
+			int result = pstmt.executeUpdate();
+			System.out.println("result 값:" + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+
 			try {
-			
-				pstmt = connection.prepareStatement(sql);
-				pstmt.setString(1, no);
-				int result =pstmt.executeUpdate();
-				System.out.println("result 값:" +result);
-			}catch(Exception e) {
-				e.printStackTrace();
-				
-			}finally {
-				
-				try {
-					
-						if(pstmt != null) pstmt.close();
-						if(connection != null) connection.close();
-				}catch(Exception e1) {
-					e1.printStackTrace();
-				}
-				
+
+				if (pstmt != null)
+					pstmt.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-			
-			return -2; // DB 오류
-		
+
+		}
+
+		return -2; // DB 오류
+
 	}
-	
-	public int 삭제인증(String no ,String password) {
-		
-		
+
+	public int 삭제인증(String no, String password) {
+
 		String sql = "select password from board where no = ?";
-		
+
 		try {
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, no);
-			
+
 			rs = pstmt.executeQuery();
-			if(rs.getString(1).equals(password)) {
+			if (rs.getString(1).equals(password)) {
 				System.out.println("비밀번호 일치");
 				return 1;
-			}else {
+			} else {
 				System.out.println("비밀번호 틀림");
-				
+
 				return 0;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
-			
-		}finally {
-			
+
+		} finally {
+
 			try {
-					if(rs != null) rs.close();
-					if(pstmt != null) pstmt.close();
-					if(connection != null) connection.close();
-			}catch(Exception e1) {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
+
 		}
-		
+
 		return -2;
-		
+
 	}
-	
-	public BoardDto 글수정하기(BoardDto dto) {
-		
+
+	public Board 글수정하기(Board dto) {
+
 		String sql = "update board set title = ? , content = ? where no =?";
-				
-				
+
 		try {
-			pstmt =connection.prepareStatement(sql);
+			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());
 			pstmt.setInt(3, dto.getNo());
@@ -313,7 +272,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return dto;
 	}
 }

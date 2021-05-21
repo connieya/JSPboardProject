@@ -1,4 +1,4 @@
-<%@page import="board.dto.BoardDto"%>
+<%@page import="board.vo.Board"%>
 <%@page import="board.dao.BoardDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -18,11 +18,11 @@
 <body>
 	<jsp:include page="component/header.jsp" flush="false" />
 	
-	<% 
-	String no = request.getParameter("no");
-	BoardDao dao =new BoardDao();
-		BoardDto dto = dao.글상세보기(no);
-	%>
+	<%
+			String no = request.getParameter("no");
+			BoardDao dao =new BoardDao();
+				Board dto = dao.글상세보기(no);
+		%>
 	<h2> 게시판</h2>
 <div class="container">
 				<form action="modify.do?no=<%=dto.getNo() %>" method="post">

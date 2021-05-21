@@ -1,4 +1,4 @@
-package board.dto;
+package board.vo;
 
 public class MemberVo {
 	

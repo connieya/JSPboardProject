@@ -15,6 +15,7 @@ public class UserDao {
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	
+
 	String url = "jdbc:mysql://localhost:3306/cony";
 	String user = "root";
 	String pw = "1234";
@@ -22,6 +23,7 @@ public class UserDao {
 	try {
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection(url,user,pw);
+		
 	}catch(Exception e) {
 		e.printStackTrace();	
 	}

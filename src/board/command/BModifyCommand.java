@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import board.dao.BoardDao;
-import board.dto.BoardDto;
+import board.vo.Board;
 
 public class BModifyCommand implements BCommand {
 
@@ -18,7 +18,7 @@ public class BModifyCommand implements BCommand {
 		
 		System.out.println("no: " +no +"title : " +title+" content: " + content);
 		int number = Integer.parseInt(no);
-		BoardDto dto = new BoardDto();
+		Board dto = new Board();
 		dto.setNo(number);
 		dto.setTitle(title);
 		dto.setContent(content);

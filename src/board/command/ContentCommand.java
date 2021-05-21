@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import board.dao.BoardDao;
-import board.dto.BoardDto;
+import board.vo.Board;
 
 public class ContentCommand implements BCommand{
 
@@ -14,7 +14,7 @@ public class ContentCommand implements BCommand{
 		String no = request.getParameter("no");
 		
 		BoardDao dao = new BoardDao();
-		BoardDto dto = dao.글상세보기(no);
+		Board dto = dao.글상세보기(no);
 		request.setAttribute("content_view", dto);
 	}
 

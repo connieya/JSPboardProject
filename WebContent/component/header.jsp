@@ -15,10 +15,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="index.jsp">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="joinForm.jsp">회원가입</a>
-      <a class="nav-item nav-link" href="login.jsp">로그인</a>
-      <a class="nav-item nav-link " href="list.do">게시판</a>
+      <a class="nav-item nav-link active" href="/board/index.jsp">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/board/user/joinForm.jsp">회원가입</a>
+      <a class="nav-item nav-link" href="/board/auth/login.jsp">로그인</a>
+      <a class="nav-item nav-link " href="/board/list.do">게시판</a>
     </div>
   </div>
 </nav>
