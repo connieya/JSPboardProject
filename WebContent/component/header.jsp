@@ -16,9 +16,9 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="/board/index.jsp">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/board/user/joinForm.jsp">회원가입</a>
-      <a class="nav-item nav-link" href="/board/auth/login.jsp">로그인</a>
-      <a class="nav-item nav-link " href="/board/list.do">게시판</a>
+      <a class="nav-item nav-link" href="/board/user/join.do">회원가입</a>
+      <a class="nav-item nav-link" href="/board/auth/login.do">로그인</a>
+      <a class="nav-item nav-link " href="/board/board/list.do">게시판</a>
     </div>
   </div>
 </nav>

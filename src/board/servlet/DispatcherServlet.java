@@ -14,13 +14,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import board.command.BCommand;
-import board.command.BDeleteCommand;
-import board.command.BModifyCommand;
-import board.command.ContentCommand;
-import board.command.JoinCommand;
-import board.command.ListCommand;
-import board.command.WriteCommand;
+import board.controller.BoardListController;
+import board.controller.BoardUpdateController;
+import board.controller.Controller;
+import board.controller.UserJoinController;
+import board.vo.Board;
+import board.vo.User;
 
 /**
  * Servlet implementation class MemberServlet
@@ -28,91 +27,56 @@ import board.command.WriteCommand;
 @WebServlet("*.do")
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    public DispatcherServlet() {
-        super();
-    }
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doHandle(request, response);
-		System.out.println("doget 호출");
-	
+
+	public DispatcherServlet() {
+		super();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doHandle(request, response);
-		System.out.println("dopost 호출");
-	}
-	
 	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String servletPath = request.getServletPath();
-		
-		
-	}
-	
-	
-	protected void doHandle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doHandle 응답");
-		
-		request.setCharacterEncoding("utf-8");
-		
-		String viewpage = null; //어떤 페이지를 보여줄건지 확인하는 값
-		BCommand bcommand = null; //dao에 작업을 전달하는??
-		
-		String uri = request.getRequestURI();
-		String conPath = request.getContextPath();
-		String com = uri.substring(conPath.length());
-			
-		Connection conn = null;		
-		Statement stmt = null;
-		ResultSet rs = null;		
 		try {
 			ServletContext sc = this.getServletContext();
-			Class.forName(sc.getInitParameter("driver"));
-			conn = DriverManager.getConnection(
-					sc.getInitParameter("url"),
-					sc.getInitParameter("username"),
-					sc.getInitParameter("password"));
-		}catch (Exception e) {
+
+			request.setAttribute("boardDao", sc.getAttribute("boardDao"));
+			request.setAttribute("userDao", sc.getAttribute("userDao"));
+			Controller pageController = null;
+			if ("/user/join.do".equals(servletPath)) {
+				pageController = new UserJoinController();
+				if (request.getParameter("name") != null) {
+					request.setAttribute("user", new User().setId(request.getParameter("id"))
+							.setName(request.getParameter("name")).setPassword(request.getParameter("pw")));
+				}
+			} else if ("/board/update.do".equals(servletPath)) {
+				pageController = new BoardUpdateController();
+				if (request.getParameter("title") != null) {
+					request.setAttribute("board",new Board()
+							.setContent(request.getParameter("content"))
+							.setTitle(request.getParameter("title")));
+				}
+			} else if ("/board/list.do".equals(servletPath)) {
+				pageController = new BoardListController();
+			}
+
+			String viewUrl = pageController.execute(request, response);
+
+			if (viewUrl.startsWith("redirect:")) {
+				response.sendRedirect(viewUrl.substring(9));
+				return;
+			} else {
+				RequestDispatcher rd =request.getRequestDispatcher(viewUrl);
+				rd = request.getRequestDispatcher(viewUrl);
+				rd.include(request, response);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("error", e);
+			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+			rd.forward(request, response);
+
 		}
-		
-		if(com.equals("/list.do")) {
-			bcommand = new ListCommand();
-			bcommand.execute(request, response);
-			viewpage = "board/BoardList.jsp";
-			
-		}else if(com.equals("/write.do")) {
-			bcommand = new WriteCommand();
-			bcommand.execute(request, response);
-			viewpage = "list.do";
-		}else if(com.equals("/content_view.do")) {
-			bcommand = new ContentCommand();
-			bcommand.execute(request, response);
-			viewpage ="content_view.jsp";
-		}else if(com.equals("/modify.do")) {
-			bcommand = new BModifyCommand();
-			bcommand.execute(request, response);
-			viewpage ="content_view.do";
-		}else if(com.equals("/delete.do")) {
-			bcommand = new BDeleteCommand();
-			bcommand.execute(request, response);
-			viewpage = "list.do";
-		}else if(com.equals("/authentication.do")){
-			bcommand = new JoinCommand();
-			bcommand.execute(request, response);
-			viewpage = "delete.do";
-		}else if(com.equals("/user/join.do")) {
-			
-		}else if(com.equals("/user/login.do")) {
-			System.out.println("호출");
-			
-		}		
-		RequestDispatcher dis = request.getRequestDispatcher(viewpage);
-		dis.forward(request, response);
-	
+
 	}
 
 }

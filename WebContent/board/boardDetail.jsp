@@ -14,7 +14,7 @@
 
 </head>
 <body>
-	<jsp:include page="component/header.jsp" flush="false" />
+	<jsp:include page="../component/header.jsp" flush="false" />
 	<h2> 게시판</h2>
 <div class="container">
   <table class="table table-striped" style="text-align :center; border: 1px solid #dddddd">

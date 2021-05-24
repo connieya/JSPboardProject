@@ -9,42 +9,56 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-public class UserDao {
-	
-	private Connection conn;
-	private PreparedStatement pstmt;
-	private ResultSet rs;
-	
+import board.vo.User;
 
-	String url = "jdbc:mysql://localhost:3306/cony";
-	String user = "root";
-	String pw = "1234";
-	public UserDao() {
-	try {
-		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection(url,user,pw);
-		
-	}catch(Exception e) {
-		e.printStackTrace();	
+public class UserDao {
+
+	Connection conn;
+	PreparedStatement pstmt;
+	ResultSet rs;
+	DataSource dataSource;
+
+	public void setDataSource(DataSource dataSoruce) {
+		this.dataSource = dataSource;
+
 	}
-}
+
 	public int login(String userID, String userPassword) {
 		String sql = "select userPassword from user where userID =?";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userID);
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				if(rs.getString(1).equals(userPassword)) {
-					return 1;  //로그인 성공
-				}else {
-					return 0;  //비밀번호 불일치
+			if (rs.next()) {
+				if (rs.getString(1).equals(userPassword)) {
+					return 1; // 로그인 성공
+				} else {
+					return 0; // 비밀번호 불일치
 				}
 			}
-			return -1; //아이디가 없음
-		}catch(Exception e) {
+			return -1; // 아이디가 없음
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return -2; // 데이터 베이스 오류
+	}
+	
+	public int join(User user) throws Exception {
+		try {
+			conn = dataSource.getConnection();
+			pstmt = conn.prepareStatement(
+					"insert into user(id, name, password) values(?,?,?)");
+			pstmt.setString(1, user.getId());
+			pstmt.setString(2, user.getName());
+			pstmt.setString(3, user.getPassword());
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw e;
+		}finally {
+		      try {if (pstmt != null) pstmt.close();} catch(Exception e) {}
+		      try {if (conn != null) conn.close();} catch(Exception e) {}
+		    }
 	}
 }

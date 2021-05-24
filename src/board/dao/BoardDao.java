@@ -22,16 +22,13 @@ public class BoardDao {
 	PreparedStatement pstmt;
 	ResultSet rs;
 
-	public void setConnection(Connection connection) {
-		this.connection = connection;
+	public void setDataSource(DataSource dataSource) {
+		this.datasource = datasource;
 	}
 	public int 글쓰기(Board dto) {
 
 		ResultSet rs = null;
-
 		try {
-
-			System.out.println("db연동 성공");
 			String sql = "insert into board(name,title,content,password,readCount) values(?,?,?,?,?)";
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, dto.getName());
@@ -45,8 +42,6 @@ public class BoardDao {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("오류 떴음");
-
 		} finally {
 
 			try {
@@ -125,7 +120,7 @@ public class BoardDao {
 		return dtos;
 	} // list() 끝
 
-	public Board 글상세보기(String no) {
+	public Board 글상세보기(int no) {
 		System.out.println("글 상세보기 호출");
 		ResultSet rs = null;
 
@@ -134,7 +129,7 @@ public class BoardDao {
 		try {
 
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, no);
+			pstmt.setInt(1, no);
 
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -164,12 +159,12 @@ public class BoardDao {
 		}
 		return null;
 	}
-	public void 조회수증가(String no) {
+	public void 조회수증가(int no) {
 		String sql = "update board set readCount = readCount +1 where no =?";
 		System.out.println("조회수 증가 메서드");
 		try {
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, no);
+			pstmt.setInt(1, no);
 			int result = pstmt.executeUpdate();
 
 			System.out.println("결과는 : " + result);
@@ -190,13 +185,13 @@ public class BoardDao {
 			}
 		}
 	}
-	public int 글삭제하기(String no) {
+	public int 글삭제하기(int no) {
 		String sql = "delete from board where no = ?";
 
 		try {
 
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, no);
+			pstmt.setInt(1, no);
 			int result = pstmt.executeUpdate();
 			System.out.println("result 값:" + result);
 		} catch (Exception e) {
