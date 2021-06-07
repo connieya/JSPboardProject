@@ -2,6 +2,7 @@ package board.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,13 +10,17 @@ import javax.servlet.http.HttpServletResponse;
 import board.dao.BoardDao;
 
 public class BoardDeleteController implements Controller {
-
+	BoardDao boardDao;
+	
+	public BoardDeleteController setBoadDao(BoardDao boardDao) {
+		this.boardDao = boardDao;
+		return this;
+	}
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
+	public String execute(Map<String, Object> model) throws Exception {
 		
-		BoardDao boardDao = (BoardDao) request.getAttribute("boardDao");
 		
-		int bno = Integer.parseInt((String) request.getAttribute("bno"));
+		int bno = Integer.parseInt((String) model.get("no"));
 		
 		boardDao.글삭제하기(bno);
 		

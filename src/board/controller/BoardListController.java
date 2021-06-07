@@ -1,22 +1,24 @@
 package board.controller;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 import board.dao.BoardDao;
 import board.vo.Board;
 
 public class BoardListController implements Controller {
+	BoardDao boardDao;
+	
+	public BoardListController setBoadDao(BoardDao boardDao) {
+		this.boardDao = boardDao;
+		return this;
+	}
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
-
-		BoardDao boardDao = (BoardDao) request.getAttribute("boardDao");
+	public String  execute(Map<String, Object> model) throws Exception {
 
 		List<Board> boards =boardDao.list();
-		request.setAttribute("boards", boards);
+		model.put("boards", boards);
 		
 		return "/board/BoardList.jsp";
 		

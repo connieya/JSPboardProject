@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -14,9 +16,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import board.bind.DataBinding;
+import board.bind.ServletRequestDataBinder;
 import board.controller.BoardListController;
 import board.controller.BoardUpdateController;
 import board.controller.Controller;
+import board.controller.LogInController;
 import board.controller.UserJoinController;
 import board.vo.Board;
 import board.vo.User;
@@ -35,37 +40,30 @@ public class DispatcherServlet extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
 		String servletPath = request.getServletPath();
 		try {
 			ServletContext sc = this.getServletContext();
 
-			request.setAttribute("boardDao", sc.getAttribute("boardDao"));
-			request.setAttribute("userDao", sc.getAttribute("userDao"));
-			Controller pageController = null;
-			if ("/user/join.do".equals(servletPath)) {
-				pageController = new UserJoinController();
-				if (request.getParameter("name") != null) {
-					request.setAttribute("user", new User().setId(request.getParameter("id"))
-							.setName(request.getParameter("name")).setPassword(request.getParameter("pw")));
-				}
-			} else if ("/board/update.do".equals(servletPath)) {
-				pageController = new BoardUpdateController();
-				if (request.getParameter("title") != null) {
-					request.setAttribute("board",new Board()
-							.setContent(request.getParameter("content"))
-							.setTitle(request.getParameter("title")));
-				}
-			} else if ("/board/list.do".equals(servletPath)) {
-				pageController = new BoardListController();
-			}
+			HashMap<String, Object> model = new HashMap<String, Object>();
+			model.put("session", request.getSession());
 
-			String viewUrl = pageController.execute(request, response);
+			Controller pageController = (Controller) sc.getAttribute(servletPath);
+			
+			if (pageController instanceof DataBinding) {
+				prepareRequestData(request, model, (DataBinding) pageController);
+			}
+			String viewUrl = pageController.execute(model);
+
+			for (String key : model.keySet()) {
+				request.setAttribute(key, model.get(key));
+			}
 
 			if (viewUrl.startsWith("redirect:")) {
 				response.sendRedirect(viewUrl.substring(9));
 				return;
 			} else {
-				RequestDispatcher rd =request.getRequestDispatcher(viewUrl);
+				RequestDispatcher rd = request.getRequestDispatcher(viewUrl);
 				rd = request.getRequestDispatcher(viewUrl);
 				rd.include(request, response);
 			}
@@ -79,4 +77,17 @@ public class DispatcherServlet extends HttpServlet {
 
 	}
 
+	private void prepareRequestData(HttpServletRequest request, HashMap<String, Object> model, DataBinding dataBinding)
+			throws Exception {
+		Object[] dataBinders = dataBinding.getDataBinders();
+		String dataName = null;
+		Class<?> dataType = null;
+		Object dataObj = null;
+		for (int i = 0; i < dataBinders.length; i += 2) {
+			dataName = (String) dataBinders[i];
+			dataType = (Class<?>) dataBinders[i + 1];
+			dataObj = ServletRequestDataBinder.bind(request, dataType, dataName);
+			model.put(dataName, dataObj);
+		}
+	}
 }

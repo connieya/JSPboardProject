@@ -43,6 +43,7 @@ public class Board {
 	}
 
 	public Board setNo(int no) {
+		this.no = no;
 		return this;
 	}
 
@@ -51,6 +52,7 @@ public class Board {
 	}
 
 	public Board setName(String name) {
+		this.name = name;
 		return this;
 	}
 
@@ -59,6 +61,7 @@ public class Board {
 	}
 
 	public Board setTitle(String title) {
+		this.title =title;
 		return this;
 	}
 
@@ -67,6 +70,7 @@ public class Board {
 	}
 
 	public Board setContent(String content) {
+		this.content = content;
 		return this;
 	}
 
@@ -75,6 +79,7 @@ public class Board {
 	}
 
 	public Board setDate(Timestamp date) {
+		this.date = date;
 		return this;
 	}
 
@@ -83,6 +88,7 @@ public class Board {
 	}
 
 	public Board setReadCount(int readCount) {
+		this.readCount = readCount;
 		return this;
 	}
 
@@ -91,6 +97,7 @@ public class Board {
 	}
 
 	public Board setPassword(String password) {
+		this.password =password;
 		return this;
 	}
 

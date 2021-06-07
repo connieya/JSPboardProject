@@ -1,35 +1,31 @@
 package board.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import board.vo.Board;
 
 public class BoardDao {
 
-	DataSource datasource;
-	Connection connection;
-	PreparedStatement pstmt;
-	ResultSet rs;
+	DataSource ds;
 
-	public void setDataSource(DataSource dataSource) {
-		this.datasource = datasource;
+	public void setDataSource(DataSource ds) {
+		this.ds = ds;
 	}
 	public int 글쓰기(Board dto) {
-
+		Connection connection = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			String sql = "insert into board(name,title,content,password,readCount) values(?,?,?,?,?)";
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, dto.getName());
 			pstmt.setString(2, dto.getTitle());
@@ -64,8 +60,11 @@ public class BoardDao {
 	public void paging() {
 		String sql = "select count(*) from board";
 		int totalCount = 0;
-
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			totalCount = rs.getInt(1);
@@ -75,15 +74,17 @@ public class BoardDao {
 		}
 	}
 
-	public ArrayList<Board> list() {
+	public List<Board> list() {
 
 		ArrayList<Board> dtos = new ArrayList<Board>();
-
+		Connection connection = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		try {
 
 			String query = "select * from board order by no desc";
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(query);
 			rs = pstmt.executeQuery();
 
@@ -93,17 +94,12 @@ public class BoardDao {
 				Timestamp date = rs.getTimestamp("date");
 				String name = rs.getString("name"); // column 명
 				int readCount = rs.getInt("readCount");
-				Board dto = new Board()
-						.setNo(no)
-						.setName(name)
-						.setTitle(title)
-						.setDate(date)
-						.setReadCount(readCount);
+				Board dto = new Board().setNo(no).setName(name).setTitle(title).setDate(date).setReadCount(readCount);
 				dtos.add(dto);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 
 			try {
 				if (rs != null)
@@ -121,13 +117,14 @@ public class BoardDao {
 	} // list() 끝
 
 	public Board 글상세보기(int no) {
-		System.out.println("글 상세보기 호출");
+		Connection connection = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		String sql = "select * from board where no =?";
 		Board dto = new Board();
 		try {
-
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setInt(1, no);
 
@@ -159,15 +156,18 @@ public class BoardDao {
 		}
 		return null;
 	}
+
 	public void 조회수증가(int no) {
 		String sql = "update board set readCount = readCount +1 where no =?";
-		System.out.println("조회수 증가 메서드");
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			int result = pstmt.executeUpdate();
 
-			System.out.println("결과는 : " + result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -185,15 +185,17 @@ public class BoardDao {
 			}
 		}
 	}
+
 	public int 글삭제하기(int no) {
 		String sql = "delete from board where no = ?";
-
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
-
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			int result = pstmt.executeUpdate();
-			System.out.println("result 값:" + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -210,7 +212,6 @@ public class BoardDao {
 			}
 
 		}
-
 		return -2; // DB 오류
 
 	}
@@ -218,8 +219,11 @@ public class BoardDao {
 	public int 삭제인증(String no, String password) {
 
 		String sql = "select password from board where no = ?";
-
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, no);
 
@@ -257,8 +261,11 @@ public class BoardDao {
 	public Board 글수정하기(Board dto) {
 
 		String sql = "update board set title = ? , content = ? where no =?";
-
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
+			connection = ds.getConnection();
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());

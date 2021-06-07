@@ -11,7 +11,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </head>
 <body>
 	<jsp:include page="../component/header.jsp" flush="false" />
@@ -48,35 +47,6 @@
   <a class="btn btn-primary" href="modify_view.jsp?no=${content_view.no }">수정</a>
    <a class="btn btn-danger"  href="delete.do?no=${content_view.no }" >삭제</a>
     <a class="btn btn-warning"  href="list.do" >목록</a>
-
-<%-- <div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-		<div class="modal-header">
-		<h5 class="modal-title" id="modal">삭제 인증 절차</h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
-		</div>
-		<div class="modal-body">
-			<form action="authentication.do?no=${content_view.no }">
-				<div class="form-group">
-					<label for="">작성자</label>
-					<h5> ${content_view.name }</h5>
-				</div>
-				<div class="form-group">
-					<label for="">비밀번호</label>
-					<input type="password" name="password" class="form-control"/>
-				</div>
-			</form>
-		</div>
-		 <div class="modal-footer">
-		 <button type="submit" class="btn btn-danger" >삭제</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-	</div>
-</div>
-</div> --%>
 </div>
 </body>
 </html>

@@ -1,25 +1,36 @@
 package board.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
+import board.bind.DataBinding;
 import board.dao.BoardDao;
 import board.vo.Board;
 
-public class BoardUpdateController implements Controller{
-
+public class BoardUpdateController implements Controller ,DataBinding{
+	BoardDao boardDao;
+	
+	public BoardUpdateController setBoadDao(BoardDao boardDao) {
+		this.boardDao = boardDao;
+		return this;
+	}
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
+	public String  execute(Map<String, Object> model) throws Exception {
 		
-		if(request.getAttribute("board") == null) {
+		if(model.get("board") == null) {
 			return "/board/boardUpdateForm.jsp";
 		}else {
-			BoardDao boardDao = (BoardDao) request.getAttribute("boardDao");
-			Board board = (Board) request.getAttribute("board");
+			Board board = (Board) model.get("board");
 			boardDao.글수정하기(board);
 			
 			return "redirect:list.do";
 		}
+	}
+	@Override
+	public Object[] getDataBinders() {
+		return new Object[] {
+				"no", Integer.class,
+				"board" , board.vo.Board.class
+		};
 	}
 
 }

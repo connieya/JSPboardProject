@@ -29,4 +29,9 @@
 - dao 객체 ServletContext에 저장하기
 
 
-###  [`DataSource와 JNDI`]()
+###  [`DataSource와 JNDI`](src/board/listeners/DataSource.md)
+- DriverManager -> DataSource 사용
+- DataSource는 서버에서 관리함 -> 데이베이스&JDBC 드라이버 변경 시 애플리케이션 바꿀 필요가 없음
+- Connection , Statement 객체 풀링 할 수 있음 & 분산 트랜잭션
+
+

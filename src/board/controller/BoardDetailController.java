@@ -1,5 +1,7 @@
 package board.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,16 +9,20 @@ import board.dao.BoardDao;
 import board.vo.Board;
 
 public class BoardDetailController implements Controller {
-
+	BoardDao boardDao;
+	
+	public BoardDetailController setBoadDao(BoardDao boardDao) {
+		this.boardDao = boardDao;
+		return this;
+	}
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
+	public String execute(Map<String, Object> model) throws Exception {
 
-		BoardDao boardDao = (BoardDao) request.getAttribute("boardDao");
 		
-		int no = Integer.parseInt((String) request.getAttribute("no"));
+		int no = Integer.parseInt((String) model.get("no"));
 		
 		Board board = boardDao.글상세보기(no);
-		request.setAttribute("boardDetail", board);
+		model.put("board", board);
 		
 		return "/board/boardDetail.jsp";
 		

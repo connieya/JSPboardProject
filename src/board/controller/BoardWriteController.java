@@ -2,6 +2,7 @@ package board.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,17 +11,21 @@ import board.dao.BoardDao;
 import board.vo.Board;
 
 public class BoardWriteController implements Controller {
-
+	BoardDao boardDao;
+	
+	public BoardWriteController setBoadDao(BoardDao boardDao) {
+		this.boardDao = boardDao;
+		return this;
+	}
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
+	public String  execute(Map<String, Object> model) throws Exception {
 
-		if (request.getAttribute("board") == null) {
+		if (model.get("board") == null) {
 			return "/board/BoardForm.jsp";
 		}else {
 			
-		BoardDao boardDao = (BoardDao) request.getAttribute("boarDao");
 
-		Board board = (Board) request.getAttribute("board");
+		Board board = (Board) model.get("board");
 
 		boardDao.글쓰기(board);
 

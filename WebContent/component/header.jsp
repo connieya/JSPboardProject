@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,10 +16,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="/board/index.jsp">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link active" href="/board//index.jsp">Home <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link" href="/board/user/join.do">회원가입</a>
       <a class="nav-item nav-link" href="/board/auth/login.do">로그인</a>
       <a class="nav-item nav-link " href="/board/board/list.do">게시판</a>
+    <c:if test="${!empty sessionScope.user}" >
+    <a class="nav-item nav-link" href="/board/user/detail.do">회원수정</a>
+    <a class="nav-item nav-link" href="/board/auth/logout.do">로그아웃</a>
+    </c:if>
     </div>
   </div>
 </nav>
